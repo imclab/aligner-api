@@ -42,4 +42,5 @@ def api_align():
 if __name__ == '__main__':
     # TODO make aligner an object to avoid reloading resources
     #aligner = aligner_mock.Aligner_mock()
-    app.run(debug=True)
+    #app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0', port=8000)
