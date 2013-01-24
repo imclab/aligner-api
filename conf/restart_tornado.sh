@@ -1,3 +1,3 @@
 #!/bin/bash
 cd /etc
-sudo supervisorctl restart all
+supervisorctl restart all
