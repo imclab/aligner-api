@@ -11,6 +11,11 @@ app = Flask(__name__)
 app.logger.setLevel(logging.INFO)
 
 
+@app.route('/check', methods=['GET'])
+def api_check():
+    return 'service online'
+
+
 @app.route('/align', methods=['POST'])
 def api_align():
     if request.headers['Content-Type'] == 'application/json':
