@@ -1,0 +1,5 @@
+{
+"p_tokens": ["bob", "ate", "cake", "."],
+"h_tokens": ["bob", "ate", "food", "."],
+"weights": "default"
+}
