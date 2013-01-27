@@ -1,1 +1,1 @@
-http://ec2-50-17-103-0.compute-1.amazonaws.com/align --header "content-type:application/json"POST < aligner1.json
+http://ec2-50-17-103-0.compute-1.amazonaws.com:8001/align?p_tokens=the%2Ccat%2Cdevoured%2Csome%2Cfood%2Cquickly&h_tokens=the%2Ccat%2Cate%2Ca%2Ccake&weights=default
