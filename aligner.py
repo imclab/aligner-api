@@ -30,6 +30,32 @@ def get_tokens(tagged_tokens, lemmatizer):
 
 
 def align(p_str_tokens, h_str_tokens, weights):
+    if weights == 'default':
+        weights = [
+            3.53942856e-01,
+            3.70786996e-01,
+            4.25952535e-01,
+            -7.24729851e-01,
+            7.71100670e-02,
+            1.03725495e-02,
+            2.20283526e-02,
+            2.51275600e-02,
+            -8.20929640e-03,
+            1.27476133e-02,
+            9.15272125e-03,
+            -3.66140450e-03,
+            8.86117041e-03,
+            1.45973335e-03,
+            1.60986864e-02,
+            9.40392547e-03,
+            -6.98016851e-03,
+            -1.39062658e-02,
+            -9.57004368e-03,
+            4.46804246e-03,
+            6.64478207e-04,
+            2.35910248e-04
+        ]
+
     all_alignments = dict()
     predicted_alignments = []
     all_features = dict()
@@ -76,15 +102,21 @@ def align(p_str_tokens, h_str_tokens, weights):
                 p_token.lemma + '_' + str(p_token.index) +
                 h_token.lemma + '_' + str(h_token.index)] = alignment
             # Score the alignment
-            features = alignment_featurizer.featurize(
-                alignment, p_str_tokens, h_str_tokens, len(p_str_tokens), len(h_str_tokens))
+            features = alignment_featurizer.featurize(alignment,
+                p_str_tokens, h_str_tokens,
+                len(p_str_tokens), len(h_str_tokens))
             alignment_score = np.dot(features, weights)
 
-            scored_alignments_to_h.append([alignment_score, h_token.lemma + '_' + str(h_token.index)])
-            all_features[p_token.lemma + '_' + str(p_index) + h_token.lemma + '_' + str(h_index)] = features
+            scored_alignments_to_h.append(
+                [alignment_score, h_token.lemma + '_' + str(h_token.index)])
+            all_features[
+                p_token.lemma + '_' + str(p_index) +
+                h_token.lemma + '_' + str(h_index)] = features
 
         all_p_prefs.append(
-            [p_token.lemma + '_' + str(p_token.index), sorted(scored_alignments_to_h, reverse=True)])
+            [p_token.lemma + '_' + str(p_token.index),
+            sorted(scored_alignments_to_h, reverse=True)])
+
     # Format the preference list for use with the marriage finder.
     p_preferences_smf = []
     for i in all_p_prefs:
@@ -109,22 +141,30 @@ def align(p_str_tokens, h_str_tokens, weights):
                     p_token.token, p_token.penn_tag, p_token.index,
                     h_token.token, h_token.penn_tag, h_token.index)
             features = alignment_featurizer.featurize(
-                alignment, p_str_tokens, h_str_tokens, len(p_str_tokens), len(h_str_tokens))
+                alignment, p_str_tokens, h_str_tokens,
+                len(p_str_tokens), len(h_str_tokens))
             all_alignments[
                 h_token.lemma + '_' + str(h_token.index) +
                 p_token.lemma + '_' + str(p_token.index)] = alignment
 
             alignment_score = np.dot(features, weights)
-            scored_alignments_to_p.append((alignment_score, p_token.lemma + '_' + str(p_token.index)))
-            all_features[h_token.lemma + '_' + str(h_index) + p_token.lemma + '_' + str(p_index)] = features
-        all_h_prefs.append((h_token.lemma + '_' + str(h_token.index), sorted(scored_alignments_to_p, reverse=True)))
+            scored_alignments_to_p.append(
+                (alignment_score, p_token.lemma + '_' + str(p_token.index)))
+            all_features[
+                h_token.lemma + '_' + str(h_index) +
+                p_token.lemma + '_' + str(p_index)
+                ] = features
+        all_h_prefs.append(
+            (h_token.lemma + '_' + str(h_token.index),
+            sorted(scored_alignments_to_p, reverse=True)))
     # Format the preference list for use with the marriage finder.
     h_preferences_smf = []
 
     for i in all_h_prefs:
         h_preferences_smf.append((i[0], [j[1] for j in i[1]]))
 
-    alignment_preferences = stable_marriage_finder.get_marriages(p_preferences_smf, h_preferences_smf)
+    alignment_preferences = stable_marriage_finder.get_marriages(
+        p_preferences_smf, h_preferences_smf)
 
     # TODO get alignment score
     # is this the sum of all alignment scores
@@ -138,33 +178,39 @@ def align(p_str_tokens, h_str_tokens, weights):
         or re.sub(r"_.+", '', alignment[1]) not in stop_types:
             print alignment[0], alignment[1]
             # TODO retrieve the alignment from all_alignments
-            predicted_alignments.append(all_alignments[alignment[0] +alignment[1]])
+            predicted_alignments.append(
+                all_alignments[alignment[0] + alignment[1]])
     return predicted_alignments, alignments_score
 
 
 if __name__ == '__main__':
-#    p = "An man won the Nobel Prize."
-#    h = "An Irishman won the Nobel Prize for literature."
-#    p = "I ate pie at the new bakery."
-#    h = "I ate food."
-#    p = "Jimmy Dean didn't move without blue jeans."
-#    h = "Jimmy Dean refused to dance without pants."
-#    p = "he ate a pie."
-#    h = "the man ate cake."
-    #p = """
-    #In May 1886 Coca-Cola was invented by Doctor John Pemberton
-    #a pharmacist from Atlanta Georgia.
-    #"""
-    #h = "did john pemberton invent coca-cola?"
-    p = "Bob ate food"
-    h = "cake was eaten by bob"
+    p = "An man won the Nobel Prize."
+    h = "An Irishman won the Nobel Prize for literature."
 
-    #weights = [
-    #0.27322009, -0.0736105, -0.18853248, -0.72425762,
-    #0.25917379, 0.54095864, 0, 0]
     weights = [
-        0.27322009, -0.0736105, -0.18853248, -0.72425762, 0.25917379, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ]
+        3.53942856e-01,
+        3.70786996e-01,
+        4.25952535e-01,
+        -7.24729851e-01,
+        7.71100670e-02,
+        1.03725495e-02,
+        2.20283526e-02,
+        2.51275600e-02,
+        -8.20929640e-03,
+        1.27476133e-02,
+        9.15272125e-03,
+        -3.66140450e-03,
+        8.86117041e-03,
+        1.45973335e-03,
+        1.60986864e-02,
+        9.40392547e-03,
+        -6.98016851e-03,
+        -1.39062658e-02,
+        -9.57004368e-03,
+        4.46804246e-03,
+        6.64478207e-04,
+        2.35910248e-04
+    ]
 
     p_str_tokens = word_tokenize(p)
     h_str_tokens = word_tokenize(h)

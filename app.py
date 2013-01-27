@@ -22,7 +22,6 @@ class CheckHandler(tornado.web.RequestHandler):
 
 class AlignHandler(tornado.web.RequestHandler):
     def post(self):
-        #data = self.get_argument('p_token', 'No data received')
         data_json = tornado.escape.json_decode(self.request.body)
         p_tokens = data_json['p_tokens']
         h_tokens = data_json['h_tokens']
