@@ -17,15 +17,6 @@ class CheckHandler(tornado.web.RequestHandler):
 
 
 class AlignHandler(tornado.web.RequestHandler):
-    #def post(self):
-        #data_json = tornado.escape.json_decode(self.request.body)
-        #p_tokens = data_json['p_tokens'].split(",")
-        #h_tokens = data_json['h_tokens'].split(",")
-        #weights = data_json['weights']
-        #alignments, score = aligner.align(p_tokens, h_tokens, weights)
-        #d = json.dumps([vars(a) for a in alignments], sort_keys=True, indent=4)
-        #self.write(d)
-
     def get(self):
         p_tokens = self.get_argument("p_tokens", strip=True).split(",")
         h_tokens = self.get_argument("h_tokens", strip=True).split(",")

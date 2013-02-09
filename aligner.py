@@ -29,6 +29,16 @@ def get_tokens(tagged_tokens, lemmatizer):
     return tokens
 
 
+def get_wn_tag(penn_tag):
+    tag_conversion_dict = {
+        'NN': wn.NOUN, 'JJ': wn.ADJ, 'VB': wn.VERB, 'RB': wn.ADV
+    }
+    if penn_tag[:2] in tag_conversion_dict.keys():
+        return tag_conversion_dict[penn_tag[:2]]
+    else:
+        return 'SKIP'
+
+
 def align(p_str_tokens, h_str_tokens, weights):
     if weights == 'default':
         weights = [
@@ -90,12 +100,16 @@ def align(p_str_tokens, h_str_tokens, weights):
                 alignment = Del.Del(p_token.token)
             elif h_token.lemma == p_token.lemma:
                 alignment = Eq.Eq(
-                    p_token.token, p_token.penn_tag, p_token.index,
-                    h_token.token, h_token.penn_tag, h_token.index)
+                    p_token.token, p_token.penn_tag,
+                    get_wn_tag(p_token.penn_tag), p_token.index,
+                    h_token.token, h_token.penn_tag,
+                    get_wn_tag(h_token.penn_tag), h_token.index)
             else:
                 alignment = Sub.Sub(
-                    p_token.token, p_token.penn_tag, p_token.index,
-                    h_token.token, h_token.penn_tag, h_token.index)
+                    p_token.token, p_token.penn_tag,
+                    get_wn_tag(p_token.penn_tag), p_token.index,
+                    h_token.token, h_token.penn_tag,
+                    get_wn_tag(h_token.penn_tag), h_token.index)
             # Store the Alignment in all_alignments using
             # p_lemma + p_index + h_lemma + h_index as the key
             all_alignments[
@@ -134,12 +148,16 @@ def align(p_str_tokens, h_str_tokens, weights):
                 alignment = Del.Del(p_token.token)
             elif h_token.lemma == p_token.lemma:
                 alignment = Eq.Eq(
-                    p_token.token, p_token.penn_tag, p_token.index,
-                    h_token.token, h_token.penn_tag, h_token.index)
+                    p_token.token, p_token.penn_tag,
+                    get_wn_tag(p_token.penn_tag), p_token.index,
+                    h_token.token, h_token.penn_tag,
+                    get_wn_tag(h_token.penn_tag), h_token.index)
             else:
                 alignment = Sub.Sub(
-                    p_token.token, p_token.penn_tag, p_token.index,
-                    h_token.token, h_token.penn_tag, h_token.index)
+                    p_token.token, p_token.penn_tag,
+                    get_wn_tag(p_token.penn_tag), p_token.index,
+                    h_token.token, h_token.penn_tag,
+                    get_wn_tag(h_token.penn_tag), h_token.index)
             features = alignment_featurizer.featurize(
                 alignment, p_str_tokens, h_str_tokens,
                 len(p_str_tokens), len(h_str_tokens))
@@ -187,34 +205,9 @@ if __name__ == '__main__':
     p = "An man won the Nobel Prize."
     h = "An Irishman won the Nobel Prize for literature."
 
-    weights = [
-        3.53942856e-01,
-        3.70786996e-01,
-        4.25952535e-01,
-        -7.24729851e-01,
-        7.71100670e-02,
-        1.03725495e-02,
-        2.20283526e-02,
-        2.51275600e-02,
-        -8.20929640e-03,
-        1.27476133e-02,
-        9.15272125e-03,
-        -3.66140450e-03,
-        8.86117041e-03,
-        1.45973335e-03,
-        1.60986864e-02,
-        9.40392547e-03,
-        -6.98016851e-03,
-        -1.39062658e-02,
-        -9.57004368e-03,
-        4.46804246e-03,
-        6.64478207e-04,
-        2.35910248e-04
-    ]
-
     p_str_tokens = word_tokenize(p)
     h_str_tokens = word_tokenize(h)
-    alignments, alignments_score = align(p_str_tokens, h_str_tokens, weights)
+    alignments, alignments_score = align(p_str_tokens, h_str_tokens, 'default')
 
     print alignments_score, '\n'
     for alignment in alignments:
