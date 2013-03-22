@@ -1,8 +1,8 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""
-
-
-"""
+'''
+@author gavinhackeling@gmail.com
+'''
 import os
 import tornado.web
 import tornado.ioloop
@@ -11,22 +11,16 @@ import aligner
 import json
 
 
-class CheckHandler(tornado.web.RequestHandler):
-    def get(self):
-        self.write('service online')
-
-
 class AlignHandler(tornado.web.RequestHandler):
     def get(self):
-        p_tokens = self.get_argument("p_tokens", strip=True).split(",")
-        h_tokens = self.get_argument("h_tokens", strip=True).split(",")
-        weights = self.get_argument("weights", strip=True)
+        p_tokens = self.get_argument("p", strip=True).split(" ")
+        h_tokens = self.get_argument("h", strip=True).split(" ")
+        weights = self.get_argument("w", strip=True)
         alignments, score = aligner.align(p_tokens, h_tokens, weights)
         d = json.dumps([vars(a) for a in alignments], sort_keys=True, indent=4)
         self.write(d)
 
 handlers = [
-            (r"/check", CheckHandler),
             (r"/align", AlignHandler),
             ]
 
