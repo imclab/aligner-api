@@ -12,205 +12,222 @@ from model import alignment_eq as Eq
 from model import alignment_sub as Sub
 from model import alignment_del as Del
 from model import alignment_ins as Ins
-from model import Token
+from model import token as tk
 import stable_marriage_finder
 
 
-def get_tokens(tagged_tokens, lemmatizer):
-    tagConversionDict = {
-        'NN': wn.NOUN, 'JJ': wn.ADJ, 'VB': wn.VERB, 'RB': wn.ADV}
-    tokens = []
-    for index, tagged_token in enumerate(tagged_tokens):
-        token = Token.Token(tagged_token[0], index, tagged_token[1])
-        if token.penn_tag[:2] in tagConversionDict:
-            token.wn_tag = tagConversionDict[token.penn_tag[:2]]
-            token.lemma = lemmatizer.lemmatize(token.token, token.wn_tag)
-        tokens.append(token)
-    return tokens
+class Aligner:
 
-
-def get_wn_tag(penn_tag):
-    tag_conversion_dict = {
-        'NN': wn.NOUN, 'JJ': wn.ADJ, 'VB': wn.VERB, 'RB': wn.ADV
-    }
-    if penn_tag[:2] in tag_conversion_dict.keys():
-        return tag_conversion_dict[penn_tag[:2]]
-    else:
-        return 'SKIP'
-
-
-def align(p_str_tokens, h_str_tokens, weights):
-    if weights == 'default':
-        weights = [
-            3.53942856e-01,
-            3.70786996e-01,
-            4.25952535e-01,
-            -7.24729851e-01,
-            7.71100670e-02,
-            1.03725495e-02,
-            2.20283526e-02,
-            2.51275600e-02,
-            -8.20929640e-03,
-            1.27476133e-02,
-            9.15272125e-03,
-            -3.66140450e-03,
-            8.86117041e-03,
-            1.45973335e-03,
-            1.60986864e-02,
-            9.40392547e-03,
-            -6.98016851e-03,
-            -1.39062658e-02,
-            -9.57004368e-03,
-            4.46804246e-03,
-            6.64478207e-04,
-            2.35910248e-04
+    def __init__(self):
+        self.weights = [
+        3.48961282e-01,
+        3.75654800e-01,
+        4.12711607e-01,
+        -7.24616082e-01,
+        3.77362029e-02,
+        1.15394180e-02,
+        1.33443409e-02,
+        1.64232249e-02,
+        -3.36975735e-02,
+        -5.02300279e-03,
+        -3.17276960e-02,
+        -2.94709012e-02,
+        1.09211720e-03,
+        -1.68436954e-02,
+        7.09680460e-03,
+        1.01815575e-03,
+        -2.07404857e-02,
+        -3.86330862e-02,
+        1.66864534e-06,
+        9.97633950e-04,
+        7.88702336e-04,
+        -1.04303582e-02,
+        6.93624232e-02,
+        7.89814727e-03
         ]
+        self.lemmatizer = WordNetLemmatizer()
 
-    all_alignments = dict()
-    predicted_alignments = []
-    all_features = dict()
-    lemmatizer = WordNetLemmatizer()
+    def get_tokens(self, tagged_tokens):
+        tagConversionDict = {
+            'NN': wn.NOUN, 'JJ': wn.ADJ, 'VB': wn.VERB, 'RB': wn.ADV}
+        tokens = []
+        for index, tagged_token in enumerate(tagged_tokens):
+            token = tk.Token(tagged_token[0], index, tagged_token[1])
+            if token.penn_tag[:2] in tagConversionDict:
+                token.wn_tag = tagConversionDict[token.penn_tag[:2]]
+                token.lemma = self.lemmatizer.lemmatize(
+                    token.token, token.wn_tag)
+            tokens.append(token)
+        return tokens
 
-    # Add INS and DEL tokens so that len(p) == len(h)
-    p_start = []
-    for index, token in enumerate(h_str_tokens):
-        p_start.append(('INS', 'SKIP'))
-    h_start = []
-    for index, token in enumerate(p_str_tokens):
-        h_start.append(('DEL', 'SKIP'))
+    def align(self, p_str_tokens, h_str_tokens, weights):
+        if weights == 'default':
+            weights = self.weights
 
-    p_tagged_tokens = pos_tag(p_str_tokens) + p_start
-    h_tagged_tokens = pos_tag(h_str_tokens) + h_start
-    p_tokens = get_tokens(p_tagged_tokens, lemmatizer)
-    h_tokens = get_tokens(h_tagged_tokens, lemmatizer)
+        alignments_score = [
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        all_alignments = dict()
+        predicted_alignments = []
+        all_features = dict()
 
-    # For each p token, order the set of h tokens from most to least preferable
-    # alignment.
-    all_p_prefs = []
-    for p_index, p_token in enumerate(p_tokens):
-        # An unordered list of tuples.
-        # tuple[i][0] = alignment score
-        # tuple[i][1] = h token
-        scored_alignments_to_h = []
-        # Create the appropriate Alignment for the current p and h tokens.
+        # Add INS and DEL tokens so that len(p) == len(h)
+        p_start = []
+        for index, token in enumerate(h_str_tokens):
+            p_start.append((u'INS', u'SKIP'))
+        h_start = []
+        for index, token in enumerate(p_str_tokens):
+            h_start.append((u'DEL', u'SKIP'))
+
+        p_tagged_tokens = pos_tag(p_str_tokens) + p_start
+        h_tagged_tokens = pos_tag(h_str_tokens) + h_start
+        p_tokens = self.get_tokens(p_tagged_tokens)
+        h_tokens = self.get_tokens(h_tagged_tokens)
+
+        # For each p token, order the set of h tokens from most to least
+        # preferable alignment.
+        all_p_prefs = []
+        for p_index, p_token in enumerate(p_tokens):
+            # An unordered list of tuples.
+            # tuple[i][0] = alignment score
+            # tuple[i][1] = h token
+            scored_alignments_to_h = []
+            # Create the appropriate Alignment for the current p and h tokens.
+            for h_index, h_token in enumerate(h_tokens):
+                if p_token.token == u'INS':
+                    alignment = Ins.Ins(h_token.token)
+                elif h_token.token == u'DEL':
+                    alignment = Del.Del(p_token.token)
+                elif h_token.lemma == p_token.lemma:
+                    alignment = Eq.Eq(
+                        p_token.token, p_token.lemma,
+                        p_token.penn_tag, p_token.index,
+                        h_token.token, h_token.lemma,
+                        h_token.penn_tag, h_token.index)
+                else:
+                    alignment = Sub.Sub(
+                        p_token.token, p_token.lemma,
+                        p_token.penn_tag, p_token.index,
+                        h_token.token, h_token.lemma,
+                        h_token.penn_tag, h_token.index)
+                # Store the Alignment in all_alignments using
+                # p_lemma + p_index + h_lemma + h_index as the key
+                all_alignments[
+                    p_token.lemma + u'_' + unicode(p_token.index) +
+                    h_token.lemma + u'_' + unicode(h_token.index)] = alignment
+                # Score the alignment
+                features = alignment_featurizer.featurize(
+                    alignment, p_str_tokens, h_str_tokens,
+                    len(p_str_tokens), len(h_str_tokens))
+                alignment_score = np.dot(features, weights)
+
+                scored_alignments_to_h.append([alignment_score,
+                h_token.lemma + u'_' + unicode(h_token.index)])
+                all_features[
+                    p_token.lemma + u'_' + unicode(p_index) +
+                    h_token.lemma + u'_' + unicode(h_index)] = features
+            all_p_prefs.append(
+                [p_token.lemma + u'_' + unicode(p_token.index),
+                sorted(scored_alignments_to_h, reverse=True)])
+
+        # Format the preference list for use with the marriage finder.
+        p_preferences_smf = []
+        for i in all_p_prefs:
+            p_preferences_smf.append((i[0], [j[1] for j in i[1]]))
+
+        # for each h token, order the set of p tokens from most to least
+        # preferable alignment.
+        all_h_prefs = []
         for h_index, h_token in enumerate(h_tokens):
-            if p_token.token == 'INS':
-                alignment = Ins.Ins(h_token.token)
-            elif h_token.token == 'DEL':
-                alignment = Del.Del(p_token.token)
-            elif h_token.lemma == p_token.lemma:
-                alignment = Eq.Eq(
-                    p_token.token, p_token.penn_tag,
-                    get_wn_tag(p_token.penn_tag), p_token.index,
-                    h_token.token, h_token.penn_tag,
-                    get_wn_tag(h_token.penn_tag), h_token.index)
-            else:
-                alignment = Sub.Sub(
-                    p_token.token, p_token.penn_tag,
-                    get_wn_tag(p_token.penn_tag), p_token.index,
-                    h_token.token, h_token.penn_tag,
-                    get_wn_tag(h_token.penn_tag), h_token.index)
-            # Store the Alignment in all_alignments using
-            # p_lemma + p_index + h_lemma + h_index as the key
-            all_alignments[
-                p_token.lemma + '_' + str(p_token.index) +
-                h_token.lemma + '_' + str(h_token.index)] = alignment
-            # Score the alignment
-            features = alignment_featurizer.featurize(alignment,
+            scored_alignments_to_p = []
+            for p_index, p_token in enumerate(p_tokens):
+                if p_token.token == u'INS':
+                    alignment = Ins.Ins(h_token.token)
+                elif h_token.token == u'DEL':
+                    alignment = Del.Del(p_token.token)
+                elif h_token.lemma == p_token.lemma:
+                    alignment = Eq.Eq(
+                        p_token.token, p_token.lemma,
+                        p_token.penn_tag, p_token.index,
+                        h_token.token, h_token.lemma,
+                        h_token.penn_tag, h_token.index)
+                else:
+                    alignment = Sub.Sub(
+                        p_token.token, p_token.lemma,
+                        p_token.penn_tag, p_token.index,
+                        h_token.token, h_token.lemma,
+                        h_token.penn_tag, h_token.index)
+
+                #print 'Alignment:\n', alignment
+
+                features = alignment_featurizer.featurize(alignment,
+                    p_str_tokens, h_str_tokens,
+                    len(p_str_tokens), len(h_str_tokens))
+                all_alignments[
+                    h_token.lemma + u'_' + unicode(h_token.index) +
+                    p_token.lemma + u'_' + unicode(p_token.index)] = alignment
+
+                alignment_score = np.dot(features, weights)
+                scored_alignments_to_p.append((alignment_score,
+                    p_token.lemma + u'_' + unicode(p_token.index)))
+                all_features[
+                    h_token.lemma + u'_' + unicode(h_index) +
+                    p_token.lemma + u'_' + unicode(p_index)] = features
+            all_h_prefs.append((h_token.lemma + u'_' + unicode(h_token.index),
+                sorted(scored_alignments_to_p, reverse=True)))
+        # Format the preference list for use with the marriage finder.
+        h_preferences_smf = []
+
+        for i in all_h_prefs:
+            h_preferences_smf.append((i[0], [j[1] for j in i[1]]))
+
+        alignment_preferences = stable_marriage_finder.get_marriages(
+            p_preferences_smf, h_preferences_smf)
+
+        # TODO get alignment score
+        # is this the sum of all alignment scores
+
+        # Append the alignment if it is not a DEL-INS SUB or EQ
+        stop_types = [u'DEL', u'INS']
+        for alignment in alignment_preferences:
+            if re.sub(r"_.+", '', alignment[0]) not in stop_types \
+            or re.sub(r"_.+", '', alignment[1]) not in stop_types:
+                predicted_alignments.append(
+                    all_alignments[alignment[0] + alignment[1]])
+
+
+        #summed_weights = 0
+        # THIS IS REDUNDANT
+        print 'score', alignments_score
+        for alignment in predicted_alignments:
+            alignment_score = alignment_featurizer.featurize(alignment,
                 p_str_tokens, h_str_tokens,
                 len(p_str_tokens), len(h_str_tokens))
-            alignment_score = np.dot(features, weights)
+            alignments_score += alignment_score
+            print alignment
+            print 'features', alignment_score
 
-            scored_alignments_to_h.append(
-                [alignment_score, h_token.lemma + '_' + str(h_token.index)])
-            all_features[
-                p_token.lemma + '_' + str(p_index) +
-                h_token.lemma + '_' + str(h_index)] = features
-
-        all_p_prefs.append(
-            [p_token.lemma + '_' + str(p_token.index),
-            sorted(scored_alignments_to_h, reverse=True)])
-
-    # Format the preference list for use with the marriage finder.
-    p_preferences_smf = []
-    for i in all_p_prefs:
-        p_preferences_smf.append((i[0], [j[1] for j in i[1]]))
-
-    # for each h token, order the set of p tokens from most to least preferable
-    # alignment.
-    all_h_prefs = []
-    for h_index, h_token in enumerate(h_tokens):
-        scored_alignments_to_p = []
-        for p_index, p_token in enumerate(p_tokens):
-            if p_token.token == 'INS':
-                alignment = Ins.Ins(h_token.token)
-            elif h_token.token == 'DEL':
-                alignment = Del.Del(p_token.token)
-            elif h_token.lemma == p_token.lemma:
-                alignment = Eq.Eq(
-                    p_token.token, p_token.penn_tag,
-                    get_wn_tag(p_token.penn_tag), p_token.index,
-                    h_token.token, h_token.penn_tag,
-                    get_wn_tag(h_token.penn_tag), h_token.index)
-            else:
-                alignment = Sub.Sub(
-                    p_token.token, p_token.penn_tag,
-                    get_wn_tag(p_token.penn_tag), p_token.index,
-                    h_token.token, h_token.penn_tag,
-                    get_wn_tag(h_token.penn_tag), h_token.index)
-            features = alignment_featurizer.featurize(
-                alignment, p_str_tokens, h_str_tokens,
-                len(p_str_tokens), len(h_str_tokens))
-            all_alignments[
-                h_token.lemma + '_' + str(h_token.index) +
-                p_token.lemma + '_' + str(p_token.index)] = alignment
-
-            alignment_score = np.dot(features, weights)
-            scored_alignments_to_p.append(
-                (alignment_score, p_token.lemma + '_' + str(p_token.index)))
-            all_features[
-                h_token.lemma + '_' + str(h_index) +
-                p_token.lemma + '_' + str(p_index)
-                ] = features
-        all_h_prefs.append(
-            (h_token.lemma + '_' + str(h_token.index),
-            sorted(scored_alignments_to_p, reverse=True)))
-    # Format the preference list for use with the marriage finder.
-    h_preferences_smf = []
-
-    for i in all_h_prefs:
-        h_preferences_smf.append((i[0], [j[1] for j in i[1]]))
-
-    alignment_preferences = stable_marriage_finder.get_marriages(
-        p_preferences_smf, h_preferences_smf)
-
-    # TODO get alignment score
-    # is this the sum of all alignment scores
-    alignments_score = [
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-    # Append the alignment if it is not a DEL-INS SUB or EQ
-    stop_types = ['DEL', 'INS']
-    for alignment in alignment_preferences:
-        print alignment[0][:-1], alignment[1][:-1]
-        if re.sub(r"_.+", '', alignment[0]) not in stop_types \
-        or re.sub(r"_.+", '', alignment[1]) not in stop_types:
-            print alignment[0], alignment[1]
-            # TODO retrieve the alignment from all_alignments
-            predicted_alignments.append(
-                all_alignments[alignment[0] + alignment[1]])
-    return predicted_alignments, alignments_score
+        print 'total score', alignments_score
+        print len(predicted_alignments)
+        averaged_features = alignments_score / len(predicted_alignments)
+        print averaged_features
+        # TODO is averaged features the best representation
+        return predicted_alignments, averaged_features
 
 
 if __name__ == '__main__':
-    p = "An man won the Nobel Prize."
-    h = "An Irishman won the Nobel Prize for literature."
-
+    #p = "An man won the Nobel Prize."
+    #h = "An Irishman won the Nobel Prize for literature."
+    p = "Barack Obama was the president"
+    h = "Barack Obama"
+    #h = "fat"
+    aligner = Aligner()
     p_str_tokens = word_tokenize(p)
     h_str_tokens = word_tokenize(h)
-    alignments, alignments_score = align(p_str_tokens, h_str_tokens, 'default')
+    alignments, alignments_score = aligner.align(
+        p_str_tokens, h_str_tokens, 'default')
 
-    print alignments_score, '\n'
-    for alignment in alignments:
-        print alignment
-
+    #print alignments_score, '\n'
+    #for alignment in alignments:
+        #print alignment
 
