@@ -19,32 +19,58 @@ import stable_marriage_finder
 class Aligner:
 
     def __init__(self):
-        self.weights = [
-        3.48961282e-01,
-        3.75654800e-01,
-        4.12711607e-01,
-        -7.24616082e-01,
-        3.77362029e-02,
-        1.15394180e-02,
-        1.33443409e-02,
-        1.64232249e-02,
-        -3.36975735e-02,
-        -5.02300279e-03,
-        -3.17276960e-02,
-        -2.94709012e-02,
-        1.09211720e-03,
-        -1.68436954e-02,
-        7.09680460e-03,
-        1.01815575e-03,
-        -2.07404857e-02,
-        -3.86330862e-02,
-        1.66864534e-06,
-        9.97633950e-04,
-        7.88702336e-04,
-        -1.04303582e-02,
-        6.93624232e-02,
-        7.89814727e-03
-        ]
+        self.weights_sentences = np.array([
+            3.48961282e-01,
+            3.75654800e-01,
+            4.12711607e-01,
+            -7.24616082e-01,
+            3.77362029e-02,
+            1.15394180e-02,
+            1.33443409e-02,
+            1.64232249e-02,
+            -3.36975735e-02,
+            -5.02300279e-03,
+            -3.17276960e-02,
+            -2.94709012e-02,
+            1.09211720e-03,
+            -1.68436954e-02,
+            7.09680460e-03,
+            1.01815575e-03,
+            -2.07404857e-02,
+            -3.86330862e-02,
+            1.66864534e-06,
+            9.97633950e-04,
+            7.88702336e-04,
+            -1.04303582e-02,
+            6.93624232e-02,
+            7.89814727e-03
+        ])
+        self.weights_phrases = np.array([
+            0.36460685,
+            0.16974013,
+            0.32817442,
+            0.21123618,
+            0.44617679,
+            0.45049947,
+            0.18118603,
+            0.16519158,
+            0.00473076,
+            0.00340283,
+            0.11341166,
+            0.04393267,
+            0.25306257,
+            0.01741644,
+            0.0228946,
+            0.0,
+            0.00326796,
+            0.00490194,
+            0.0,
+            0.0,
+            0.0,
+            0.00160063,
+            0.37955125,
+            0.0
+        ])
         self.lemmatizer = WordNetLemmatizer()
 
     def get_tokens(self, tagged_tokens):
@@ -62,7 +88,9 @@ class Aligner:
 
     def align(self, p_str_tokens, h_str_tokens, weights):
         if weights == 'default':
-            weights = self.weights
+            weights = self.weights_sentences
+        elif weights == 'phrases':
+            weights = self.weights_phrases
 
         alignments_score = [
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -198,19 +226,19 @@ class Aligner:
 
         #summed_weights = 0
         # THIS IS REDUNDANT
-        print 'score', alignments_score
+        #print 'score', alignments_score
         for alignment in predicted_alignments:
             alignment_score = alignment_featurizer.featurize(alignment,
                 p_str_tokens, h_str_tokens,
                 len(p_str_tokens), len(h_str_tokens))
             alignments_score += alignment_score
-            print alignment
-            print 'features', alignment_score
+            #print alignment
+            #print 'features', alignment_score
 
-        print 'total score', alignments_score
-        print len(predicted_alignments)
+        #print 'total score', alignments_score
+        #print len(predicted_alignments)
         averaged_features = alignments_score / len(predicted_alignments)
-        print averaged_features
+        #print averaged_features
         # TODO is averaged features the best representation
         return predicted_alignments, averaged_features
 

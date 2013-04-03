@@ -24,7 +24,6 @@ class AlignStringsHandler(tornado.web.RequestHandler):
             'averaged_features': averaged_features.tolist(),
             'alignments': [a.__dict__ for a in alignments]
         }
-        #d = json.dumps([vars(a) for a in alignments], sort_keys=True, indent=4)
         d = json.dumps(response)
         self.write(d)
 
