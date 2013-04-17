@@ -38,7 +38,6 @@ from random import shuffle
 from math import sqrt
 import os
 import time
-import logging
 try:
     import cPickle as pickle
 except:
@@ -51,7 +50,7 @@ def learn_weights(training_set, learning_epochs, burn_in_epochs,
 learning_rate, learning_rate_multiplier):
     weights = [
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0
+        0, 0, 0, 0, 0
         ]
     weights_history = []
 

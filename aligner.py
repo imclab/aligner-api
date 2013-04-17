@@ -94,7 +94,8 @@ class Aligner:
 
         alignments_score = [
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0]
         all_alignments = dict()
         predicted_alignments = []
         all_features = dict()
@@ -222,7 +223,6 @@ class Aligner:
             or re.sub(r"_.+", '', alignment[1]) not in stop_types:
                 predicted_alignments.append(
                     all_alignments[alignment[0] + alignment[1]])
-
 
         #summed_weights = 0
         # THIS IS REDUNDANT

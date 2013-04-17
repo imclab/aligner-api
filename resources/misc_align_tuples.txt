@@ -3,3 +3,7 @@ humans,people
 human,person
 by,written
 by,created
+some,a
+beat,defeat
+make,by
+made,by

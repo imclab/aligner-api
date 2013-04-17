@@ -90,6 +90,7 @@ def featurize(edit, p_tokens, h_tokens, p_len, h_len):
     if edit.edit_type == 'EQ':
         features[0] = 1
         features[4] = 1
+        features[24] = 1
 
     elif edit.edit_type == 'SUB':
         p_synsets = get_synsets(edit.p_token, edit.p_wn_tag)
@@ -133,7 +134,14 @@ def featurize(edit, p_tokens, h_tokens, p_len, h_len):
         features[21] = is_matching_WRB(edit)
         features[22] = is_same_lowercased(edit)
         features[23] = misc_align(edit)
+        features[24] = has_same_lemma(edit)
     return features
+
+
+def has_same_lemma(alignment):
+    if alignment.p_lemma == alignment.h_lemma:
+        return 1
+    return 0
 
 
 def is_same_lowercased(edit):

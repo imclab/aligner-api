@@ -1,3 +1,35 @@
+Carl sang the song poorly .
+The (3) song (4) was (N) badly (5) sung (2) by (N) Karl (1) . (6)
+The toys were purchased by Zipper .
+Zipper (6) purchased (4) the (1) toys (2) . (7)
+The masked man stole the pizzas .
+The (1) pizzas (6) were (N) stolen (4) by (N) a (N) bad (N) man (3) wearing (N) a (N) mask (2) . (7)
+The kitten ate the food .
+The (1) food (5) was (N) eaten (3) by (N) the (N) cat (2) . (6)
+The judge threw the book at him .
+The (1) book (5) was (N) thrown (3) at (6) him (7) . (8)
+The mayor announced Google Fiber was coming .
+The (1) arrival (7) of (N) Google (4) Fiber (5) was (6) announced (3) by (N) the (N) mayor (2) . (8)
+Gavin wrote the book about cat hats .
+The (3) cat (6) hat (7) novel (4) was (N) written (2) by (N) Gavin (1) . (8)
+Kentucky was beaten by Carolina .
+Carolina (5) beat (3) Kentucky (1) . (6)
+Duke was defeated by Carolina .
+Carolina (5) defeated (3) Duke (1) . (6)
+After defeating State , Princeton beat Harvard .
+Harvard (7) was (N) beaten (6) by (N) Princeton (5) . (8)
+The kangaroo was jumping .
+The (1) kangaroo (2) jumped (4) . (5)
+Joey beat Dave in chess
+Dave (3) beat (2) Joey (1)
+Carolina defeated Duke .
+Carolina (1) beat (2) Duke (3) . (4)
+The pizza was delicious .
+I (N) had (N) the (1) tasty (4) pizza (2) . (5)
+The food here is incredible .
+The (1) pizza (2) is (4) excellent (5) . (6)
+I ate some food .
+I (1) ate (2) a (3) pizza (4) . (5)
 North Carolina easily defeated the Dook Blue Devils in the NCAA tournament .
 Dook (6) failed (N) to (N) beat (4) North (1) Carolina (2) . (13)
 The Duke Blue Devils were crushed by the North Carolina Tar Heels .

@@ -248,3 +248,125 @@ assistant to the general manager
 assistant (1) manager (5) Carl (N) Jones (N)
 the black and white cat
 the (1) tuxedo (N) cat (5)
+a tasty sandwich
+some (1) food (3)
+sandwiches
+sandwich (1)
+a delicious soup
+some (1) food (3)
+an excellent dinner
+a (1) great (2) meal (3)
+the hilarious movie
+the (1) funny (2) film (3)
+an awful bar
+a (1) terrible (2) bar (3)
+an awful pub
+a (1) horrible (2) bar (3)
+the worst socks
+terrible (2) socks (3)
+a crazy event
+a (1) weird (2) event (3)
+an unusual murder
+a (1) mysterious (2) killing (3)
+an unsolved murder
+a (1) murder (3)
+an ancient war
+an (1) ancient (2) and (N) forgotten (N) conflict (3)
+a terrible and disfiguring accident
+a (1) horrifying (2) accident (5)
+a merciless leader
+a (1) cold (2) tyrant (3)
+the fuzzy baby cat
+the (1) tiny (N) kitten (4)
+the small cat
+the (1) tiny (2) kitten (3)
+the fat man
+the (1) big (N) fat (2) man (3)
+the man who loved to promote himself
+the (1) man (2) who (3) always (N) promoted (6) himself (7)
+the sneaky cutthroat
+the (1) clever (2) backstabber (3)
+Washington , a hero of the revolution ,
+Washington (1)
+the dreamy doctor Stan
+handsome (2) Stan (4)
+the angry beavers
+a (1) pack (N) of (N) pissed (2) beavers (3)
+the gaggle of loud and hostile geese
+the (1) angry (6) geese (7)
+gold medalist at the fart Olympics
+winner (2) at (3) the (4) farting (5) olympics (6)
+protector of the realm and leader of the seven kingdoms
+lord (N) protector (1) and (5) sovereign (6) of (7) all (N) the (8) seven (9) kingdoms (10)
+the dark knight
+a (1) dark (2) knight (3)
+his nemesis
+his (1) rival (2)
+the attack had the element of surprise
+the (4) surprise (7) attack (2)
+the empire struck back
+the (1) evil (N) empire (2) attacked (3)
+the hit TV show
+a (1) popular (2) TV (3) show (4)
+a new iPhone with a larger screen
+an (1) updated (2) iPhone (3)
+closed source garbage
+proprietary(1) trash (2)
+mix and match any six bottles
+pick (3) any (4) six (5) bottles (6)
+several varieties of beer
+many (1) kinds (2) of (3) lagers (4)
+a mulititude of hats
+many (2) hats (4)
+a collection of penguins
+a (1) penguin (4) collection (2) of (3) impressive (N) size (N)
+the revenge of the Sith lord
+the (1) Sith (5) Lord (6) 's (3) revenge (2)
+the battle at Blackwater Bay
+the (1) battle (2) in (3) the (N) bay (5)
+the jerk store
+a (1) store (3) that (N) sells (N) jerks (2)
+the clumsy pirate
+a (1) pirate (3) known (N) for (N) clumsiness (2)
+a pixar movie
+a (1) film (3) from (N) Pixar (2)
+about a drone who loses her way
+about (1) a (2) lost (5) drone (3)
+who needs to find her way home
+who (1) is (N) trying (2) to (3) get (4) home (7)
+President Obama 's visit to Colorado today
+The (N) President (1) 's (3) Colorado (6) trip (7)
+to press his case for modest gun control
+is (N) an (N) effort (N) to (1) make (2) the (N) case (4) for (5) gun (7) control (8)
+to supposedly solve the scourge of gun violence by arming teachers
+to (1) purportedly (2) solve (3) the (4) gun (7) violence (8) problem (N) by (9) arming (10) teachers (11) at (N) schools (N)
+increasingly bizarre gun debate
+increasingly (1) surreal (2) debate (4) about (N) guns (3)
+universal background checks for all people
+background (2) checks (3) for (4) everyone (6)
+a new ad campaign
+a (1) recent (2) advertising (3) campaign (4)
+a stealth government plot to confiscate your guns
+a (1) sneaky (2) plan (4) by (N) the (N) government (3) to (5) steal (6) your (7) weapons (8)
+Reagan 's position on background checks
+Reagan (1) 's (2) stance (3) on (4) requiring (N) background (5) checks (6)
+an official state religion
+a (1) state (3) religion (4)
+in districts
+in (1) many (N) precincts (2)
+on an issue like guns
+on (1) the (2) gun (5) issue (3)
+SOPA was only the beginning
+SOPA (1) was (2) just (3) the (4) first (5) salvo (N)
+file sharing site The Pirate Bay
+The (4) Pirate (5) Bay (6) , (N) a (N) site (3) for (N) sharing (2) files (1)
+the acclaimed director of Transfomers
+the (1) director (3) of (4) movies (N) including (N) Transformers (5)
+looked out the window at the pidgeons
+gazed (1) through (2) the (3) window (4) at (5) birds (7)
+That is the argument Obama
+That (1) is (2) Obama (5) 's (N) argument (4)
+Angry Birds creator Rovio
+Rovio (4) , (N) the (N) creators (3) of (N) hit (N) games (N) like (N) Angry (1) Birds (2)
+The flip side is the big problem
+The (1) alternative (2) is (4) the (5) massive (6) problem (7)

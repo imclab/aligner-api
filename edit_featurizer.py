@@ -92,12 +92,12 @@ def get_synsets(token, wn_tag):
 
 
 def featurize(edit, p_tokens, h_tokens, p_len, h_len):
-    features = np.zeros(24, dtype=float)
+    features = np.zeros(25, dtype=float)
 
     if edit.edit_type == 'EQ':
         features[0] = 1
         features[4] = 1
-        #features[37] = 1
+        features[24] = 1
 
     elif edit.edit_type == 'SUB':
         p_synsets = get_synsets(edit.p_token, edit.p_wn_tag)
@@ -140,6 +140,7 @@ def featurize(edit, p_tokens, h_tokens, p_len, h_len):
         features[21] = is_matching_WRB(edit)
         features[22] = is_same_lowercased(edit)
         features[23] = misc_align(edit)
+        features[24] = has_same_lemma(edit)
         #features[24] = are_light(edit)
         #features[25] = are_preps(edit)
         #features[26] = are_pronouns(edit)
@@ -152,7 +153,6 @@ def featurize(edit, p_tokens, h_tokens, p_len, h_len):
         #features[33] = is_quantifier_lexent_6(edit)
         #features[34] = are_same_entity_type(edit)
         #features[35] = is_un_in_dis_pair(edit)
-        #features[36] = has_same_lemma(edit)
         ## get_coordinate_terms_score() is only for SUB
         ##features[37] = get_coordinate_terms_score(edit, p_synsets, h_synsets)
         #features[38] = are_unequal_numbers(edit)
