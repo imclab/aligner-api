@@ -16,7 +16,7 @@ def featurize(problem):
     '''
     features = [
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0
+        0, 0, 0, 0, 0
         ]
     for edit in problem.gold:
         features += edit_featurizer.featurize(
