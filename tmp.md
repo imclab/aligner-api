@@ -1,0 +1,116 @@
+1. Single-Threaded Document Frequency Computation
+-------------------------------------------------
+
+    Doc Frequencies:
+    -------------------------
+    
+      president: 38393
+      attended: 38500
+      competed: 38099
+      fuck: 38081
+      deputy: 38589
+      declared: 38671
+      event: 37887
+      bought: 38579
+      right: 38359
+      or: 346566
+      told: 38451
+      possibly: 38206
+      answer: 38261
+      deadly: 38534
+      evolution: 38384
+      gummy: 38668
+      few: 38252
+      violated: 38303
+      vastly: 38000
+      made: 38317
+      biggest: 38188
+      visited: 38098
+      usually: 38841
+      grew: 38212
+      smiled: 38061
+      conversation: 38405
+      tragic: 37762
+      enjoyed: 38083
+      classes: 38544
+      tone: 38124
+      a: 345947
+      lawyers: 37967
+      enjoy: 37993
+      join: 38285
+      prospects: 38327
+      taking: 38143
+      labor: 38144
+      new: 38518
+      red: 37954
+      including: 37982
+      days: 38042
+      guess: 38455
+      developer: 38307
+      having: 38328
+      blogosphere: 38092
+      profiles: 38373
+      moves: 38053
+      settings: 38586
+      took: 38130
+      capital: 38425
+      policies: 38141
+      compact: 38441
+      march: 38364
+      medical: 38061
+      basic: 38058
+      priority: 38634
+      description: 38386
+      reputation: 38447
+      condescending: 38510
+      popped: 38574
+      watch: 37936
+      align: 38380
+      minimalism: 38518
+      mafia: 38353
+      far: 38392
+      display: 38294
+      jay: 38163
+      criticism: 38207
+      unsmiling: 38584
+      fan: 38353
+      much: 38479
+      and: 346970
+      that: 346182
+      involved: 38427
+      particularly: 38205
+      exposition: 38423
+      often: 38198
+      tough: 38342
+      orders: 38718
+      treasury: 38428
+      make: 37925
+      sparse: 38452
+      room: 38370
+      connect: 38058
+      distant: 38287
+      indication: 38149
+      tried: 38242
+      optimally: 38286
+      through: 38174
+      hacker: 38302
+      business: 38270
+      trainer: 37880
+      possible: 38387
+      following: 38199
+      bullish: 38460
+      especially: 38212
+      dominate: 38305
+      chris: 38283
+      confronting: 38582
+      reached: 38514
+      spends: 38331
+      andrew: 37999
+      mail: 38026
+      layer: 37760
+      the: 346984
+    -------------------------
+    
+    Total docs: 1000000
+    Total time: 1587 ms
+
